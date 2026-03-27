@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚡ ANTIGRAVITY | Next-Gen Trading Terminal</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/ui/style.css?v=4">
+</head>
+
+<body class="dark-theme">
+    <nav class="navbar">
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">ANTIGRAVITY <span class="brand-suffix">EX</span></span>
+        </div>
+        <div class="market-selector">
+            <div class="dropdown">
+                <button id="current-pair-btn" class="dropbtn">BTC_USDT <span class="arrow">▼</span></button>
+                <div id="market-dropdown" class="dropdown-content">
+                    <a href="#" data-symbol="BTC_USDT">BTC_USDT</a>
+                    <a href="#" data-symbol="ETH_USDT">ETH_USDT</a>
+                    <a href="#" data-symbol="SOL_USDT">SOL_USDT</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav-metrics">
+            <div class="metric">
+                <span class="label">Price</span>
+                <span class="value" id="top-price">0.00</span>
+            </div>
+            <div class="metric">
+                <span class="label">24h Change</span>
+                <span class="value positive" id="price-change">+0.00%</span>
+            </div>
+        </div>
+        <div class="user-profile" id="profile-btn"
+            style="cursor: pointer; padding: 6px 16px; border-radius: 20px; background: rgba(0, 255, 149, 0.1); border: 1px solid var(--accent-green);">
+            <span id="user-id-badge" style="color: var(--accent-green); font-weight: 700;">User: ?</span>
+        </div>
+    </nav>
+
+    <main class="trading-layout">
+        <section class="left-panel">
+            <div class="panel-header">
+                <h2>Place Order</h2>
+            </div>
+            <div class="order-form">
+                <div class="side-selector">
+                    <button id="buy-tab" class="active">Buy</button>
+                    <button id="sell-tab">Sell</button>
+                </div>
+                <div class="input-group">
+                    <label>Order Type</label>
+                    <select id="order-type" class="sleek-select" style="margin-bottom:15px;">
+                        <option value="LIMIT">Limit</option>
+                        <option value="MARKET">Market</option>
+                    </select>
+                </div>
+                <div class="input-group" id="price-group">
+                    <label>Price</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="order-price" placeholder="0.00">
+                        <span class="unit">USDT</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Quantity</label>
+                    <div class="input-wrapper">
+                        <input type="number" id="order-qty" placeholder="0.00">
+                        <span class="unit">BTC</span>
+                    </div>
+                </div>
+
+                <div class="advanced-options" id="advanced-options-group">
+                    <div class="input-group">
+                        <label>Time In Force</label>
+                        <select id="time-in-force" class="sleek-select">
+                            <option value="GTC">GTC (Good-Til-Cancelled)</option>
+                            <option value="IOC">IOC (Immediate-Or-Cancel)</option>
+                            <option value="FOK">FOK (Fill-Or-Kill)</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" id="post-only">
+                            <span class="checkmark"></span>
+                            Post Only
+                        </label>
+                    </div>
+                </div>
+
+                <div class="order-summary">
+                    <span>Total:</span>
+                    <span id="order-total">0.00 USDT</span>
+                </div>
+                <button id="place-order-btn" class="buy-btn">Place Buy Order</button>
+            </div>
+            <div class="balances">
+                <div class="balance-item">
+                    <span>BTC</span>
+                    <span id="bal-btc">0.00000000</span>
+                </div>
+                <div class="balance-item">
+                    <span>USDT</span>
+                    <span id="bal-usdt">0.00</span>
+                </div>
+                <button id="deposit-btn">Quick Deposit (10k)</button>
+            </div>
+        </section>
+
+        <section class="center-panel">
+            <div class="orderbook-container">
+                <div class="panel-header">
+                    <h2>Order Book</h2>
+                </div>
+                <div class="orderbook-header">
+                    <span>Price(USDT)</span>
+                    <span>Amount(BTC)</span>
+                    <span>Total</span>
+                </div>
+                <div class="orderbook-list">
+                    <div id="asks" class="side-asks"></div>
+                    <div class="spread-row">
+                        <div class="spread-inner">
+                            <span id="spread-price" class="price-up">0.00</span>
+                            <span id="spread-percent">0.00%</span>
+                        </div>
+                    </div>
+                    <div id="bids" class="side-bids"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="right-panel">
+            <div class="panel-header">
+                <h2>Market Trades</h2>
+            </div>
+            <div class="trades-header">
+                <span>Price</span>
+                <span>Qty</span>
+                <span>Time</span>
+            </div>
+            <div id="trade-history" class="trade-list">
+                <!-- Real-time trades -->
+            </div>
+        </section>
+    </main>
+
+    <section class="bottom-panel">
+        <div class="panel-header">
+            <div class="tabs">
+                <button id="tab-open" class="tab-btn active">Open Orders</button>
+                <button id="tab-order-hist" class="tab-btn">Order History</button>
+                <button id="tab-trade-hist" class="tab-btn">Trade History</button>
+            </div>
+        </div>
+
+        <!-- Tab 1: Open Orders -->
+        <div class="orders-table-wrapper" id="open-orders-view">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Symbol</th>
+                        <th>Side</th>
+                        <th>Price</th>
+                        <th>Filled</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="open-orders-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Tab 2: Order History -->
+        <div class="orders-table-wrapper" id="order-hist-view" style="display: none;">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Symbol</th>
+                        <th>Side</th>
+                        <th>Price</th>
+                        <th>Filled</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="order-hist-body"></tbody>
+            </table>
+        </div>
+
+        <!-- Tab 3: Trade History (Executions) -->
+        <div class="orders-table-wrapper" id="trade-hist-view" style="display: none;">
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Symbol</th>
+                        <th>Side</th>
+                        <th>Price</th>
+                        <th>Executed Qty</th>
+                        <th>Role</th>
+                        <th>Fee</th>
+                    </tr>
+                </thead>
+                <tbody id="trade-hist-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <div id="notification-area"></div>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <h2 style="color: white; margin-bottom: 8px;">Welcome to ANTIGRAVITY</h2>
+            <p style="color: var(--text-dim); margin-bottom: 24px;">Enter your User ID to continue</p>
+            <div class="input-wrapper" style="margin-bottom: 20px;">
+                <input type="number" id="login-user-id" placeholder="e.g. 1337"
+                    style="text-align: center; font-size: 1.4rem;">
+            </div>
+            <button id="login-submit-btn" class="buy-btn"
+                style="width: 100%; border: none; padding: 14px; border-radius: 8px; font-weight: 700; cursor: pointer;">Login
+                / Switch User</button>
+        </div>
+    </div>
+
+    <script src="/ui/app.js?v=9"></script>
+</body>
+
+</html>
